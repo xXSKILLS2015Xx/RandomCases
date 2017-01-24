@@ -1,5 +1,15 @@
 name: RandomCases
 author: TappedGraphics
-version: 1.0
+version: 1.1.7
 main: me.tappedgraphics.random.Cases
 description: Random crafting cases!
+
+commands:
+  rc:
+    description: RandomCases help menu
+    aliases: [randomcase, randomcases, randomcaseshelp, rchelp, helprc]
+
+permissions:
+    rc.use:
+       description: Main RandomCases command.
+       default: op
