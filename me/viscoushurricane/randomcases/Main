@@ -1,0 +1,63 @@
+package me.viscoushurricane.randomcases;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.Set;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Server;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfigurationOptions;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class Cases
+  extends JavaPlugin
+  implements Listener
+{
+  private Random random;
+  private Material[] items;
+  
+  public void onEnable()
+  {
+    Bukkit.getServer().addRecipe(
+      new ShapelessRecipe(new ItemStack(Material.DIAMOND_BLOCK))
+      .addIngredient(Material.TRIPWIRE_HOOK)
+      .addIngredient(Material.CHEST));
+    
+    getConfig().options().copyDefaults(true);
+    saveConfig();
+    
+    this.random = new Random();
+    this.items = new Material[100];
+    
+    int index = 0;
+    Map.Entry<String, Object> entry;
+    int i;
+    for (Iterator localIterator = getConfig().getConfigurationSection("Items").getValues(false).entrySet().iterator(); localIterator.hasNext(); i < Integer.valueOf(entry.getValue().toString()).intValue())
+    {
+      entry = (Map.Entry)localIterator.next();
+      i = 0; continue;
+      this.items[(index++)] = Material.valueOf(((String)entry.getKey()).toUpperCase());i++;
+    }
+    Bukkit.getServer().getPluginManager().registerEvents(this, this);
+  }
+  
+  @EventHandler
+  public void onItemCraft(CraftItemEvent e)
+  {
+    if (e.getRecipe().getResult().getType() == Material.DIAMOND_BLOCK) {
+      e.getInventory().setResult(new ItemStack(this.items[this.random.nextInt(this.items.length)]));
+    }
+  }
+}
