@@ -13,7 +13,22 @@
 #
 # NOTE: All items must equal to 100%
 
-Items:
+#Case
+Case:
+        stone: 60
+        chest: 10
+        diamond: 10
+        gravel: 20
+
+#Ender Case
+EnderCase:
+        stone: 20
+        chest: 50
+        diamond: 10
+        gravel: 20
+        
+#TNT Case
+TNTCase:
         stone: 20
         chest: 50
         diamond: 10
