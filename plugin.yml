@@ -1,7 +1,7 @@
 name: RandomCases
 author: TappedGraphics
 version: 1.1.7
-main: me.tappedgraphics.random.Cases
+main: me.viscoushurricane.randomcases.Main
 description: Random crafting cases!
 
 commands:
