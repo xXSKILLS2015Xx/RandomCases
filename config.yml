@@ -1,0 +1,20 @@
+##################################
+#                                                   #
+#               RandomCases                 #
+#                Version - 1.0                 #
+#   Developed by: TappedGraphics   #  
+#           Config Version - 5.5            #
+#                                                   #
+##################################
+
+# ExampleItems:
+#      itemname: chance
+#
+#
+# NOTE: All items must equal to 100%
+
+Items:
+        stone: 20
+        chest: 50
+        diamond: 10
+        gravel: 20
