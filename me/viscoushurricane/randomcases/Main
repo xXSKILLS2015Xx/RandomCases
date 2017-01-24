@@ -1,4 +1,4 @@
-package me.tappedgraphics.random;
+package me.viscoushurricane.randomcases;
 
 import java.util.Iterator;
 import java.util.Map;
