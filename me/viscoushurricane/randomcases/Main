@@ -1,4 +1,4 @@
-package me.viscoushurricane.randomcases;
+package me.tappedgraphics.random;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -6,8 +6,11 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
@@ -31,9 +34,18 @@ public class Cases
   public void onEnable()
   {
     Bukkit.getServer().addRecipe(
-      new ShapelessRecipe(new ItemStack(Material.DIAMOND_BLOCK))
+      new ShapelessRecipe(new ItemStack(Material.DIRT))
       .addIngredient(Material.TRIPWIRE_HOOK)
       .addIngredient(Material.CHEST));
+    Bukkit.getServer().addRecipe(
+      new ShapelessRecipe(new ItemStack(Material.DIAMOND_BLOCK))
+      .addIngredient(Material.TRIPWIRE_HOOK)
+      .addIngredient(Material.ENDER_CHEST));
+    
+    Bukkit.getServer().addRecipe(
+      new ShapelessRecipe(new ItemStack(Material.FIREBALL))
+      .addIngredient(Material.REDSTONE_TORCH_ON)
+      .addIngredient(Material.TNT));
     
     getConfig().options().copyDefaults(true);
     saveConfig();
@@ -44,20 +56,70 @@ public class Cases
     int index = 0;
     Map.Entry<String, Object> entry;
     int i;
-    for (Iterator localIterator = getConfig().getConfigurationSection("Items").getValues(false).entrySet().iterator(); localIterator.hasNext(); i < Integer.valueOf(entry.getValue().toString()).intValue())
+    for (Iterator localIterator1 = getConfig().getConfigurationSection("Case").getValues(false).entrySet().iterator(); localIterator1.hasNext(); i < Integer.valueOf(entry.getValue().toString()).intValue())
     {
-      entry = (Map.Entry)localIterator.next();
+      entry = (Map.Entry)localIterator1.next();
       i = 0; continue;
-      this.items[(index++)] = Material.valueOf(((String)entry.getKey()).toUpperCase());i++;
+      this.items[(index++)] = Material.valueOf(((String)entry.getKey()).toUpperCase());
+      
+      int index1 = 0;
+      Map.Entry<String, Object> entry1;
+      int i1;
+      for (Iterator localIterator2 = getConfig().getConfigurationSection("EnderCase").getValues(false).entrySet().iterator(); localIterator2.hasNext(); i1 < Integer.valueOf(entry1.getValue().toString()).intValue())
+      {
+        entry1 = (Map.Entry)localIterator2.next();
+        i1 = 0; continue;
+        this.items[(index1++)] = Material.valueOf(((String)entry1.getKey()).toUpperCase());
+        
+        int index2 = 0;
+        Map.Entry<String, Object> entry2;
+        int i2;
+        for (Iterator localIterator3 = getConfig().getConfigurationSection("TNTCase").getValues(false).entrySet().iterator(); localIterator3.hasNext(); i2 < Integer.valueOf(entry2.getValue().toString()).intValue())
+        {
+          entry2 = (Map.Entry)localIterator3.next();
+          i2 = 0; continue;
+          this.items[(index2++)] = Material.valueOf(((String)entry2.getKey()).toUpperCase());i2++;
+        }
+        Bukkit.getServer().getPluginManager().registerEvents(this, this);i1++;
+      }
+      i++;
     }
-    Bukkit.getServer().getPluginManager().registerEvents(this, this);
   }
   
   @EventHandler
   public void onItemCraft(CraftItemEvent e)
   {
-    if (e.getRecipe().getResult().getType() == Material.DIAMOND_BLOCK) {
+    if (e.getRecipe().getResult().getType() == Material.DIRT) {
+      e.getInventory().setResult(new ItemStack(this.items[this.random.nextInt(this.items.length)]));
+    } else if (e.getRecipe().getResult().getType() == Material.DIAMOND_BLOCK) {
+      e.getInventory().setResult(new ItemStack(this.items[this.random.nextInt(this.items.length)]));
+    } else if (e.getRecipe().getResult().getType() == Material.FIREBALL) {
       e.getInventory().setResult(new ItemStack(this.items[this.random.nextInt(this.items.length)]));
     }
+  }
+  
+  public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
+  {
+    if (cmd.getName().equalsIgnoreCase("rc"))
+    {
+      if (!sender.hasPermission("rc.use"))
+      {
+        sender.sendMessage(ChatColor.AQUA + ChatColor.BOLD + "RandomCases" + 
+          ChatColor.BLUE + ChatColor.ITALIC + " � " + ChatColor.RED + "You may not perform this commend, missing insufficient permission.");
+        return true;
+      }
+      if (args.length == 0)
+      {
+        sender.sendMessage(ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "----------------" + " " + 
+          ChatColor.AQUA + ChatColor.BOLD + " RandomCases " + ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "---------------");
+        sender.sendMessage(ChatColor.AQUA + "Step 1" + ChatColor.BLUE + ": " + ChatColor.WHITE + "Grab the chosen block and key");
+        sender.sendMessage(ChatColor.AQUA + "Step 2" + ChatColor.BLUE + ": " + ChatColor.WHITE + "Open a crafting bench");
+        sender.sendMessage(ChatColor.AQUA + "Step 3" + ChatColor.BLUE + ": " + ChatColor.WHITE + "Place in the Block and key for a chanced reward");
+        sender.sendMessage(ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "--------" + " " + 
+          ChatColor.AQUA + ChatColor.BOLD + " Developed by" + ChatColor.WHITE + ChatColor.BOLD + " TappedGraphics " + ChatColor.BLUE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "---------");
+        return true;
+      }
+    }
+    return true;
   }
 }
